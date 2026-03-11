@@ -55,8 +55,13 @@ html,body{
   cursor:pointer;
 }
 
-.navdot{
-  cursor:pointer;
+.navdot{ cursor:pointer; }
+
+.dot.outline{
+  background:transparent !important;
+  border:1.5px solid black;
+  box-sizing:border-box;
+  transition:background 0.4s ease, border 0.4s ease !important;
 }
 
 .section{
@@ -79,9 +84,7 @@ html,body{
 
 .section-bottom{
   position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
+  left:0; right:0; bottom:0;
   padding:28px 32px;
   box-sizing:border-box;
 }
@@ -95,38 +98,13 @@ html,body{
   margin:0;
 }
 
-.work-row{
-  display:flex;
-  gap:clamp(16px,4vw,40px);
-  flex-wrap:wrap;
-}
-
-.work-item{
-  font-size:11px;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  color:#bbb;
-  font-family:sans-serif;
-}
-
-.work-item span{
-  display:block;
-  font-size:clamp(11px,1.8vw,13px);
-  text-transform:none;
-  letter-spacing:0;
-  color:#999;
-  margin-top:4px;
-}
-
 .contact-row{
   display:flex;
   gap:clamp(16px,5vw,48px);
   flex-wrap:wrap;
 }
 
-.contact-item{
-  font-family:sans-serif;
-}
+.contact-item{ font-family:sans-serif; }
 
 .contact-item .clabel{
   font-size:9px;
@@ -140,6 +118,47 @@ html,body{
 .contact-item .cval{
   font-size:clamp(11px,1.8vw,13px);
   color:#999;
+}
+
+/* ── Nav SVG connector ── */
+#nav-svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:visible;
+}
+
+#nav-path{
+  fill:none;
+  stroke:black;
+  stroke-width:0.6;
+  stroke-dasharray:206;
+  stroke-dashoffset:206;
+  opacity:0;
+}
+
+#nav-path.draw-animate{
+  stroke-dashoffset:0;
+  opacity:1;
+  transition:stroke-dashoffset 3.2s linear, opacity 0.3s ease;
+}
+
+#nav-path.draw-instant{
+  stroke-dashoffset:0;
+  opacity:1;
+  transition:opacity 0.3s ease;
+}
+
+@keyframes dotPulse{
+  0%   { background:black; transform:translate(-50%,-50%) translateZ(0) scale(1.1); }
+  40%  { background:white; transform:translate(-50%,-50%) translateZ(0) scale(1.35); }
+  100% { background:black; transform:translate(-50%,-50%) translateZ(0) scale(1.1); }
+}
+
+.dot.pulsing{
+  animation:dotPulse 0.5s ease forwards;
 }
 
 /* ── Work section ── */
@@ -156,6 +175,22 @@ html,body{
   justify-content:center;
   font-size:40px;
   flex-shrink:0;
+  position:relative;
+}
+
+.work-line{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:1px;
+  background:#222;
+  height:0;
+  transition:height 1.1s cubic-bezier(.4,0,.2,1);
+}
+
+#work.line-ready .work-line{
+  height:clamp(40px,8vh,80px);
 }
 
 #work .work-projects{
@@ -174,9 +209,7 @@ html,body{
   border-top:1px solid #eee;
 }
 
-.project-entry:last-child{
-  padding-bottom:0;
-}
+.project-entry:last-child{ padding-bottom:0; }
 
 .project-entry:nth-child(even) .project-img-wrap{ order:2; }
 .project-entry:nth-child(even) .project-text{ order:1; }
@@ -199,9 +232,7 @@ html,body{
 
 .project-img.tall{ aspect-ratio:3/4; }
 
-.project-text{
-  font-family:sans-serif;
-}
+.project-text{ font-family:sans-serif; }
 
 .project-num{
   font-size:9px;
@@ -244,17 +275,22 @@ html,body{
 <body>
 
 <div class="stage">
-  <div class="rotator" id="rotator"></div>
+  <div class="rotator" id="rotator">
+    <svg id="nav-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path id="nav-path" d="M 22,25 L 50,50 L 78,25 L 22,25 L 78,75"/>
+    </svg>
+  </div>
 </div>
 
 <div class="section" id="work">
-  <div class="work-hero">WORK</div>
+  <div class="work-hero">
+    WORK
+    <div class="work-line"></div>
+  </div>
   <div class="work-projects">
 
     <div class="project-entry">
-      <div class="project-img-wrap">
-        <div class="project-img"></div>
-      </div>
+      <div class="project-img-wrap"><div class="project-img"></div></div>
       <div class="project-text">
         <div class="project-num">01</div>
         <div class="project-title">••••••</div>
@@ -268,9 +304,7 @@ html,body{
     </div>
 
     <div class="project-entry">
-      <div class="project-img-wrap">
-        <div class="project-img tall"></div>
-      </div>
+      <div class="project-img-wrap"><div class="project-img tall"></div></div>
       <div class="project-text">
         <div class="project-num">02</div>
         <div class="project-title">••••••</div>
@@ -284,9 +318,7 @@ html,body{
     </div>
 
     <div class="project-entry">
-      <div class="project-img-wrap">
-        <div class="project-img"></div>
-      </div>
+      <div class="project-img-wrap"><div class="project-img"></div></div>
       <div class="project-text">
         <div class="project-num">03</div>
         <div class="project-title">••••••</div>
@@ -300,9 +332,7 @@ html,body{
     </div>
 
     <div class="project-entry">
-      <div class="project-img-wrap">
-        <div class="project-img tall"></div>
-      </div>
+      <div class="project-img-wrap"><div class="project-img tall"></div></div>
       <div class="project-text">
         <div class="project-num">04</div>
         <div class="project-title">••••••</div>
@@ -351,6 +381,8 @@ html,body{
 
 <script>
 const rotator = document.getElementById("rotator");
+const navPath = document.getElementById("nav-path");
+let navLineDrawn = false;
 
 const DOTS = 10;
 const dots = [];
@@ -434,18 +466,74 @@ const mPositions = [
 const navSections = ["work", "about", "contact"];
 let activeDotIndex = null;
 
+function restartToFirst(){
+  // Clear nav line state so it re-animates next time
+  navLineDrawn = false;
+  navPath.classList.remove("draw-animate", "draw-instant");
+
+  stage = "letters";
+  index = 0;
+  hovering = false;
+
+  rotator.style.animation = "";
+
+  dots.forEach(dot => {
+    dot.classList.remove("navdot", "pulsing", "outline");
+    dot.onclick = null;
+    dot.onmouseenter = null;
+    dot.onmouseleave = null;
+    dot.style.transition = "left .9s cubic-bezier(.4,0,.2,1), top .9s cubic-bezier(.4,0,.2,1), opacity .35s ease, transform .35s ease";
+    dot.style.position = "absolute";
+    dot.style.bottom = "auto";
+    dot.style.zIndex = "";
+    dot.style.cursor = "pointer";
+    dot.style.opacity = 1;
+    dot.style.background = "black";
+    dot.style.border = "none";
+    dot.style.transform = "translate(-50%,-50%) translateZ(0) scale(1)";
+  });
+
+  ringLayout();
+}
+
+function makeOutline(idx){
+  const d = dots[idx];
+  d.style.transition = "background 0.4s ease";
+  d.style.background = "transparent";
+  d.style.border = "1.5px solid black";
+  d.style.boxSizing = "border-box";
+}
+
+function pulseDot(idx){
+  const d = dots[idx];
+  d.classList.remove("pulsing");
+  void d.offsetWidth;
+  d.classList.add("pulsing");
+  setTimeout(() => d.classList.remove("pulsing"), 520);
+}
+
 function navigationStage(){
   clearInterval(pulseTimer);
   stage = "nav";
   rotator.style.animation = "none";
 
+  document.getElementById("work").classList.remove("line-ready");
+  navPath.classList.remove("draw-animate", "draw-instant");
+  dots.forEach(d => d.classList.remove("pulsing"));
+
   dots.forEach((dot) => {
-    dot.classList.remove("navdot");
+    dot.classList.remove("navdot", "outline");
+    dot.style.background = "";
+    dot.style.border = "";
+    dot.style.boxSizing = "";
+    dot.style.transition = "";
     dot.onclick = null;
     dot.style.position = "absolute";
     dot.style.bottom = "auto";
     dot.style.zIndex = "";
     dot.style.boxShadow = "none";
+    dot.style.background = "black";
+    dot.style.border = "none";
     dot.style.transform = "translate(-50%,-50%) translateZ(0) scale(1)";
     dot.style.cursor = "pointer";
   });
@@ -461,6 +549,13 @@ function navigationStage(){
       dot.classList.add("navdot");
       dot.style.transform = "translate(-50%,-50%) translateZ(0) scale(1.1)";
       attachNavDot(dot, i);
+    } else if(i === 6){
+      // Bottom-right dot — starts solid, becomes hollow when line arrives
+      dot.style.transform = "translate(-50%,-50%) translateZ(0) scale(1)";
+      dot.style.cursor = "pointer";
+      dot.style.background = "black";
+      dot.style.border = "";
+      dot.onclick = restartToFirst;
     } else {
       dot.style.transform = "translate(-50%,-50%) translateZ(0) scale(1)";
       dot.style.cursor = "default";
@@ -472,6 +567,36 @@ function navigationStage(){
     dot.style.transition = "opacity 0.8s ease " + (0.05*(i-7)) + "s";
     dot.style.opacity = 0;
   }
+
+  // If line already played once, dot[6] should already be hollow
+  if(navLineDrawn){
+    const d6 = dots[6];
+    d6.style.transition = "none";
+    d6.style.background = "transparent";
+    d6.style.border = "1.5px solid black";
+    d6.style.boxSizing = "border-box";
+  }
+
+  if(!navLineDrawn){
+    navLineDrawn = true;
+    // Animated draw with timed pulses — first visit only
+    const lineDelay = 1500;
+    const drawDuration = 3200;
+    const totalLen = 206;
+    setTimeout(() => {
+      navPath.classList.add("draw-animate");
+      pulseDot(0);
+      setTimeout(() => pulseDot(1),    (37.5 / totalLen) * drawDuration);
+      setTimeout(() => pulseDot(2),    (75.0 / totalLen) * drawDuration);
+      setTimeout(() => pulseDot(0),    (131  / totalLen) * drawDuration);
+      setTimeout(() => makeOutline(6), drawDuration);
+    }, lineDelay);
+  } else {
+    // Already drawn — snap visible instantly, no animation, no pulses
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      navPath.classList.add("draw-instant");
+    }));
+  }
 }
 
 function attachNavDot(dot, i){
@@ -479,13 +604,15 @@ function attachNavDot(dot, i){
 
   dot.addEventListener("mouseenter", () => {
     stopNavPulse(i);
-    navPulseTimers[i] = setInterval(() => {
-      dot.style.opacity = (parseFloat(dot.style.opacity) === 1 ? 0.2 : 1);
-    }, 350);
+    // Trigger the same pulse as the line-touch, looping while hovered
+    pulseDot(i);
+    navPulseTimers[i] = setInterval(() => pulseDot(i), 550);
   });
 
   dot.addEventListener("mouseleave", () => {
     stopNavPulse(i);
+    dot.classList.remove("pulsing");
+    dot.style.background = "black";
     dot.style.opacity = 1;
   });
 }
@@ -493,6 +620,9 @@ function attachNavDot(dot, i){
 function showSection(i){
   activeDotIndex = i;
   const id = navSections[i];
+
+  // Hide line when entering a section
+  navPath.classList.remove("draw-animate", "draw-instant");
 
   dots.forEach((dot, j) => {
     if(j !== i){
@@ -516,8 +646,9 @@ function showSection(i){
   const sectionEl = document.getElementById(id);
   sectionEl.classList.add("active");
 
-  // Fade dot on scroll for the work section
   if(id === "work"){
+    setTimeout(() => sectionEl.classList.add("line-ready"), 400);
+
     const heroH = window.innerHeight;
     const onScroll = () => {
       const st = sectionEl.scrollTop;
@@ -539,13 +670,13 @@ function goBack(){
   snapDot.style.zIndex = "";
   snapDot.style.opacity = 1;
 
-  // Remove scroll listener and reset work section scroll position
   const workEl = document.getElementById("work");
   if(workEl._dotScrollHandler){
     workEl.removeEventListener("scroll", workEl._dotScrollHandler);
     workEl._dotScrollHandler = null;
     workEl.scrollTop = 0;
   }
+  workEl.classList.remove("line-ready");
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
