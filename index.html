@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MNSYNE</title>
+<title>mn-home</title>
 
 <style>
 html,body{
@@ -76,6 +76,168 @@ html,body{
   opacity:1;
   pointer-events:auto;
 }
+
+.section-bottom{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:28px 32px;
+  box-sizing:border-box;
+}
+
+.section-sub{
+  font-size:clamp(11px,1.8vw,13px);
+  color:#999;
+  line-height:1.6;
+  font-family:sans-serif;
+  max-width:380px;
+  margin:0;
+}
+
+.work-row{
+  display:flex;
+  gap:clamp(16px,4vw,40px);
+  flex-wrap:wrap;
+}
+
+.work-item{
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#bbb;
+  font-family:sans-serif;
+}
+
+.work-item span{
+  display:block;
+  font-size:clamp(11px,1.8vw,13px);
+  text-transform:none;
+  letter-spacing:0;
+  color:#999;
+  margin-top:4px;
+}
+
+.contact-row{
+  display:flex;
+  gap:clamp(16px,5vw,48px);
+  flex-wrap:wrap;
+}
+
+.contact-item{
+  font-family:sans-serif;
+}
+
+.contact-item .clabel{
+  font-size:9px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:#bbb;
+  display:block;
+  margin-bottom:4px;
+}
+
+.contact-item .cval{
+  font-size:clamp(11px,1.8vw,13px);
+  color:#999;
+}
+
+/* ── Work section ── */
+#work{
+  display:block;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+#work .work-hero{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  flex-shrink:0;
+}
+
+#work .work-projects{
+  padding:0 clamp(24px,6vw,72px) 100px;
+  box-sizing:border-box;
+  max-width:860px;
+  margin:0 auto;
+}
+
+.project-entry{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(24px,5vw,56px);
+  align-items:start;
+  padding:clamp(40px,7vh,80px) 0;
+  border-top:1px solid #eee;
+}
+
+.project-entry:last-child{
+  padding-bottom:0;
+}
+
+.project-entry:nth-child(even) .project-img-wrap{ order:2; }
+.project-entry:nth-child(even) .project-text{ order:1; }
+
+@media(max-width:540px){
+  .project-entry{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .project-entry:nth-child(even) .project-img-wrap,
+  .project-entry:nth-child(even) .project-text{ order:unset; }
+}
+
+.project-img{
+  width:100%;
+  aspect-ratio:4/3;
+  background:#e8e8e8;
+  display:block;
+}
+
+.project-img.tall{ aspect-ratio:3/4; }
+
+.project-text{
+  font-family:sans-serif;
+}
+
+.project-num{
+  font-size:9px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:#ccc;
+  margin-bottom:14px;
+}
+
+.project-title{
+  font-size:clamp(15px,2.4vw,20px);
+  color:#222;
+  font-weight:400;
+  line-height:1.2;
+  margin-bottom:12px;
+}
+
+.project-desc{
+  font-size:clamp(11px,1.6vw,13px);
+  color:#999;
+  line-height:1.75;
+  margin-bottom:18px;
+}
+
+.project-tags{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.project-tag{
+  font-size:9px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:#ccc;
+}
 </style>
 </head>
 
@@ -85,9 +247,107 @@ html,body{
   <div class="rotator" id="rotator"></div>
 </div>
 
-<div class="section" id="work">WORK</div>
-<div class="section" id="about">AB<span style="visibility:hidden">O</span>UT</div>
-<div class="section" id="contact">CONTACT</div>
+<div class="section" id="work">
+  <div class="work-hero">WORK</div>
+  <div class="work-projects">
+
+    <div class="project-entry">
+      <div class="project-img-wrap">
+        <div class="project-img"></div>
+      </div>
+      <div class="project-text">
+        <div class="project-num">01</div>
+        <div class="project-title">Brand System</div>
+        <div class="project-desc">Visual identity for a cultural institution navigating a period of transition. The system needed to hold across print, digital, and environmental applications while remaining open to interpretation.</div>
+        <div class="project-tags">
+          <span class="project-tag">Identity</span>
+          <span class="project-tag">Print</span>
+          <span class="project-tag">2024</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-entry">
+      <div class="project-img-wrap">
+        <div class="project-img tall"></div>
+      </div>
+      <div class="project-text">
+        <div class="project-num">02</div>
+        <div class="project-title">Archive Interface</div>
+        <div class="project-desc">Navigation system for a decade of editorial photography. The challenge was making twenty thousand images browsable without reducing them to a grid — building a sense of time and accumulation into the interface itself.</div>
+        <div class="project-tags">
+          <span class="project-tag">Interface</span>
+          <span class="project-tag">Digital</span>
+          <span class="project-tag">2024</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-entry">
+      <div class="project-img-wrap">
+        <div class="project-img"></div>
+      </div>
+      <div class="project-text">
+        <div class="project-num">03</div>
+        <div class="project-title">Motion Study</div>
+        <div class="project-desc">A short looping work exploring rhythm and negative space. Made as a personal investigation into how stillness and movement can coexist in the same frame.</div>
+        <div class="project-tags">
+          <span class="project-tag">Motion</span>
+          <span class="project-tag">Personal</span>
+          <span class="project-tag">2023</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-entry">
+      <div class="project-img-wrap">
+        <div class="project-img tall"></div>
+      </div>
+      <div class="project-text">
+        <div class="project-num">04</div>
+        <div class="project-title">Type Specimen</div>
+        <div class="project-desc">Custom lettering for a limited-run publication on craft and making. Each letterform was drawn in response to the content of the essay it accompanied — typography as illustration.</div>
+        <div class="project-tags">
+          <span class="project-tag">Typography</span>
+          <span class="project-tag">Editorial</span>
+          <span class="project-tag">2023</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section" id="about">
+  AB<span style="visibility:hidden">O</span>UT
+  <div class="section-bottom">
+    <p class="section-sub">Collective working at the edge of language and form. Practice spans identity, interaction, and whatever the project needs it to be. Currently independent.</p>
+  </div>
+</div>
+
+<div class="section" id="contact">
+  CONTACT
+  <div class="section-bottom">
+    <div class="contact-row">
+      <div class="contact-item">
+        <span class="clabel">Email</span>
+        <span class="cval">hello@mnemosyne.studio</span>
+      </div>
+      <div class="contact-item">
+        <span class="clabel">Instagram</span>
+        <span class="cval">@mn___syne</span>
+      </div>
+      <div class="contact-item">
+        <span class="clabel">Based</span>
+        <span class="cval">Los Angeles / New York</span>
+      </div>
+      <div class="contact-item">
+        <span class="clabel">Available</span>
+        <span class="cval">From March 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 const rotator = document.getElementById("rotator");
@@ -118,7 +378,6 @@ let pulseTimer = null;
 let navPulseTimers = [];
 let stage = "letters";
 
-// create 10 dots
 for(let i=0; i<DOTS; i++){
   const d = document.createElement("div");
   d.className = "dot";
@@ -135,7 +394,7 @@ function ringLayout(){
     dot.style.top = y + "%";
     dot.style.opacity = 1;
     dot.style.transform = "translate(-50%,-50%) translateZ(0) scale(1)";
-  })
+  });
 }
 
 function brailleLayout(letter){
@@ -149,7 +408,7 @@ function brailleLayout(letter){
     } else {
       dot.style.opacity = 0;
     }
-  })
+  });
 }
 
 function startPulse(){
@@ -163,13 +422,13 @@ function startPulse(){
 }
 
 const mPositions = [
-  [22, 25],  // 0 top-left    → WORK
-  [50, 50],  // 1 mid-center  → ABOUT
-  [78, 25],  // 2 top-right   → CONTACT
-  [22, 50],  // 3 mid-left    (decorative)
-  [78, 50],  // 4 mid-right   (decorative)
-  [22, 75],  // 5 bot-left    (decorative)
-  [78, 75],  // 6 bot-right   (decorative)
+  [22, 25],
+  [50, 50],
+  [78, 25],
+  [22, 50],
+  [78, 50],
+  [22, 75],
+  [78, 75],
 ];
 
 const navSections = ["work", "about", "contact"];
@@ -180,7 +439,6 @@ function navigationStage(){
   stage = "nav";
   rotator.style.animation = "none";
 
-  // Reset all dots
   dots.forEach((dot) => {
     dot.classList.remove("navdot");
     dot.onclick = null;
@@ -192,7 +450,6 @@ function navigationStage(){
     dot.style.cursor = "pointer";
   });
 
-  // Position the 7 M-shape dots
   for(let i = 0; i < 7; i++){
     const dot = dots[i];
     dot.style.transition = "left 1s cubic-bezier(.4,0,.2,1), top 1s cubic-bezier(.4,0,.2,1), opacity 0.6s ease, transform 0.6s ease";
@@ -210,10 +467,9 @@ function navigationStage(){
     }
   }
 
-  // Fade out unused dots (7, 8, 9)
   for(let i = 7; i < DOTS; i++){
     const dot = dots[i];
-    dot.style.transition = `opacity 0.8s ease ${0.05*(i-7)}s`;
+    dot.style.transition = "opacity 0.8s ease " + (0.05*(i-7)) + "s";
     dot.style.opacity = 0;
   }
 }
@@ -238,7 +494,6 @@ function showSection(i){
   activeDotIndex = i;
   const id = navSections[i];
 
-  // Fade out all other dots
   dots.forEach((dot, j) => {
     if(j !== i){
       dot.style.transition = "opacity 0.5s ease";
@@ -249,7 +504,6 @@ function showSection(i){
   const activeDot = dots[i];
   stopNavPulse(i);
 
-  // Stay exactly where it is — no position change needed
   activeDot.style.transition = "none";
   activeDot.style.zIndex = 100;
   activeDot.style.opacity = 1;
@@ -259,7 +513,20 @@ function showSection(i){
   activeDot.onmouseleave = null;
 
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  const sectionEl = document.getElementById(id);
+  sectionEl.classList.add("active");
+
+  // Fade dot on scroll for the work section
+  if(id === "work"){
+    const heroH = window.innerHeight;
+    const onScroll = () => {
+      const st = sectionEl.scrollTop;
+      const fade = Math.max(0, 1 - st / (heroH * 0.4));
+      activeDot.style.opacity = fade;
+    };
+    sectionEl.addEventListener("scroll", onScroll);
+    sectionEl._dotScrollHandler = onScroll;
+  }
 }
 
 function goBack(){
@@ -267,12 +534,19 @@ function goBack(){
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
   activeDotIndex = null;
 
-  // Dot never moved — just clear zIndex and it's already in place
   const snapDot = dots[snapIndex];
   snapDot.style.transition = "none";
   snapDot.style.zIndex = "";
+  snapDot.style.opacity = 1;
 
-  // Double rAF ensures the snap is painted before navigationStage re-adds transitions
+  // Remove scroll listener and reset work section scroll position
+  const workEl = document.getElementById("work");
+  if(workEl._dotScrollHandler){
+    workEl.removeEventListener("scroll", workEl._dotScrollHandler);
+    workEl._dotScrollHandler = null;
+    workEl.scrollTop = 0;
+  }
+
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       navigationStage();
@@ -287,8 +561,6 @@ function stopNavPulse(i){
   }
 }
 
-
-// event listeners
 rotator.addEventListener("mouseenter",()=>{
   if(stage==="letters"){
     hovering=true;
@@ -318,10 +590,9 @@ rotator.addEventListener("click",()=>{
     return;
   }
   brailleLayout(letters[index]);
-})
+});
 
 ringLayout();
-
 </script>
 
 </body>
