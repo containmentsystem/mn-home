@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>mnemosyne</title>
+<title>mn-home</title>
 
 <style>
 html,body{
@@ -13,6 +13,7 @@ html,body{
   display:flex;
   align-items:center;
   justify-content:center;
+  font-family:sans-serif;
 }
 
 .stage{
@@ -44,100 +45,292 @@ html,body{
   transform:translate(-50%,-50%);
   opacity:1;
   transition:
-    left .8s cubic-bezier(.4,0,.2,1),
-    top .8s cubic-bezier(.4,0,.2,1),
-    opacity .5s ease;
+    left .9s cubic-bezier(.4,0,.2,1),
+    top .9s cubic-bezier(.4,0,.2,1),
+    opacity .35s ease,
+    transform .35s ease;
+  cursor:pointer;
+}
+
+.navdot{
+  cursor:pointer;
+}
+
+.section{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .6s ease;
+}
+
+.section.active{
+  opacity:1;
+  pointer-events:auto;
 }
 </style>
 </head>
+
 <body>
+
 <div class="stage">
   <div class="rotator" id="rotator"></div>
 </div>
 
+<div class="section" id="work">WORK</div>
+<div class="section" id="about">AB<span style="visibility:hidden">O</span>UT</div>
+<div class="section" id="contact">CONTACT</div>
+
 <script>
-const rotator=document.getElementById("rotator")
-const DOTS=10
-const dots=[]
-const radius=42
+const rotator = document.getElementById("rotator");
 
-// Letters sequence
-const letters = ["M","N","E","M","O","S","Y","N","E"]
+const DOTS = 10;
+const dots = [];
+const radius = 42;
 
-// Braille positions 2x3
-const braillePos=[
+const letters = ["M","N","E","M","O","S","Y","N","E"];
+const braillePos = [
   [42,30],[58,30],
   [42,50],[58,50],
   [42,70],[58,70]
-]
-
-// Standard English Braille
+];
 const brailleLetters = {
-"M":[1,3,4],
-"N":[1,3,4,5],
-"E":[1,5],
-"O":[1,3,5],
-"S":[2,3,4],
-"Y":[1,3,4,5,6]
+  "M":[1,3,4],
+  "N":[1,3,4,5],
+  "E":[1,5],
+  "O":[1,3,5],
+  "S":[2,3,4],
+  "Y":[1,3,4,5,6]
+};
+
+let index = 0;
+let hovering = false;
+let pulseIndex = 0;
+let pulseTimer = null;
+let navPulseTimers = [];
+let stage = "letters";
+
+// create 10 dots
+for(let i=0; i<DOTS; i++){
+  const d = document.createElement("div");
+  d.className = "dot";
+  rotator.appendChild(d);
+  dots.push(d);
 }
 
-let index=0
-let hovering=false
-
-// Create dots
-for(let i=0;i<DOTS;i++){
-  const d=document.createElement("div")
-  d.className="dot"
-  rotator.appendChild(d)
-  dots.push(d)
-}
-
-// Ring layout
 function ringLayout(){
   dots.forEach((dot,i)=>{
-    const angle=(i/DOTS)*Math.PI*2
-    const x=50+radius*Math.cos(angle)
-    const y=50+radius*Math.sin(angle)
-    dot.style.left=x+"%"
-    dot.style.top=y+"%"
-    dot.style.opacity=1
-    dot.style.transitionDelay="0s"
+    const angle = (i/DOTS)*Math.PI*2;
+    const x = 50 + radius*Math.cos(angle);
+    const y = 50 + radius*Math.sin(angle);
+    dot.style.left = x + "%";
+    dot.style.top = y + "%";
+    dot.style.opacity = 1;
+    dot.style.transform = "translate(-50%,-50%) scale(1)";
   })
 }
 
-// Braille layout
 function brailleLayout(letter){
-  const pattern = brailleLetters[letter]
+  const pattern = brailleLetters[letter];
   dots.forEach((dot,i)=>{
-    if(i < pattern.length){
-      const pos = braillePos[pattern[i]-1]
-      dot.style.left=pos[0]+"%"
-      dot.style.top=pos[1]+"%"
-      dot.style.opacity=1
+    if(i<pattern.length){
+      const pos = braillePos[pattern[i]-1];
+      dot.style.left = pos[0]+"%";
+      dot.style.top = pos[1]+"%";
+      dot.style.opacity = 1;
     } else {
-      dot.style.opacity=0
+      dot.style.opacity = 0;
     }
-    dot.style.transitionDelay=(i*0.05)+"s"
   })
 }
 
+function startPulse(){
+  stage = "pulse";
+  pulseIndex = 0;
+  pulseTimer = setInterval(()=>{
+    dots.forEach(dot=>dot.style.opacity=1);
+    dots[pulseIndex].style.opacity=0;
+    pulseIndex = (pulseIndex-1+DOTS)%DOTS;
+  },220);
+}
+
+const mPositions = [
+  [22, 25],  // 0 top-left    → WORK
+  [50, 50],  // 1 mid-center  → ABOUT
+  [78, 25],  // 2 top-right   → CONTACT
+  [22, 50],  // 3 mid-left    (decorative)
+  [78, 50],  // 4 mid-right   (decorative)
+  [22, 75],  // 5 bot-left    (decorative)
+  [78, 75],  // 6 bot-right   (decorative)
+];
+
+const navSections = ["work", "about", "contact"];
+let activeDotIndex = null;
+
+function navigationStage(){
+  clearInterval(pulseTimer);
+  stage = "nav";
+  rotator.style.animation = "none";
+
+  // Reset all dots
+  dots.forEach((dot) => {
+    dot.classList.remove("navdot");
+    dot.onclick = null;
+    dot.style.position = "absolute";
+    dot.style.bottom = "auto";
+    dot.style.zIndex = "";
+    dot.style.boxShadow = "none";
+    dot.style.transform = "translate(-50%,-50%) scale(1)";
+    dot.style.cursor = "pointer";
+  });
+
+  // Position the 7 M-shape dots
+  for(let i = 0; i < 7; i++){
+    const dot = dots[i];
+    dot.style.transition = "left 1s cubic-bezier(.4,0,.2,1), top 1s cubic-bezier(.4,0,.2,1), opacity 0.6s ease, transform 0.6s ease";
+    dot.style.left = mPositions[i][0] + "%";
+    dot.style.top = mPositions[i][1] + "%";
+    dot.style.opacity = 1;
+
+    if(i < 3){
+      dot.classList.add("navdot");
+      dot.style.transform = "translate(-50%,-50%) scale(1.1)";
+      attachNavDot(dot, i);
+    } else {
+      dot.style.transform = "translate(-50%,-50%) scale(1)";
+      dot.style.cursor = "default";
+    }
+  }
+
+  // Fade out unused dots (7, 8, 9)
+  for(let i = 7; i < DOTS; i++){
+    const dot = dots[i];
+    dot.style.transition = `opacity 0.8s ease ${0.05*(i-7)}s`;
+    dot.style.opacity = 0;
+  }
+}
+
+function attachNavDot(dot, i){
+  dot.onclick = () => showSection(i);
+
+  dot.addEventListener("mouseenter", () => {
+    stopNavPulse(i);
+    navPulseTimers[i] = setInterval(() => {
+      dot.style.opacity = (parseFloat(dot.style.opacity) === 1 ? 0.2 : 1);
+    }, 350);
+  });
+
+  dot.addEventListener("mouseleave", () => {
+    stopNavPulse(i);
+    dot.style.opacity = 1;
+  });
+}
+
+function showSection(i){
+  activeDotIndex = i;
+  const id = navSections[i];
+
+  // Fade out all other dots
+  dots.forEach((dot, j) => {
+    if(j !== i){
+      dot.style.transition = "opacity 0.5s ease";
+      dot.style.opacity = 0;
+    }
+  });
+
+  const activeDot = dots[i];
+  stopNavPulse(i);
+
+  // Capture exact screen position before reparenting to fixed
+  const rect = activeDot.getBoundingClientRect();
+
+  activeDot.style.transition = "none";
+  activeDot.style.position = "fixed";
+  activeDot.style.left = rect.left + "px";
+  activeDot.style.top = rect.top + "px";
+  activeDot.style.bottom = "auto";
+  activeDot.style.transform = "translate(0, 0)";
+  activeDot.style.zIndex = 100;
+  activeDot.style.opacity = 1;
+
+  activeDot.onclick = goBack;
+  activeDot.onmouseenter = null;
+  activeDot.onmouseleave = null;
+
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function goBack(){
+  const snapIndex = activeDotIndex;
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  activeDotIndex = null;
+
+  // Instantly snap the active dot back to its M position with no transition
+  const snapDot = dots[snapIndex];
+  snapDot.style.transition = "none";
+  snapDot.style.position = "absolute";
+  snapDot.style.left = mPositions[snapIndex][0] + "%";
+  snapDot.style.top = mPositions[snapIndex][1] + "%";
+  snapDot.style.bottom = "auto";
+  snapDot.style.zIndex = "";
+  snapDot.style.transform = "translate(-50%,-50%) scale(1.1)";
+
+  // Double rAF ensures the snap is painted before navigationStage re-adds transitions
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      navigationStage();
+    });
+  });
+}
+
+function stopNavPulse(i){
+  if(navPulseTimers[i]){
+    clearInterval(navPulseTimers[i]);
+    navPulseTimers[i] = null;
+  }
+}
+
+// event listeners
 rotator.addEventListener("mouseenter",()=>{
-  hovering=true
-  brailleLayout(letters[index])
-})
+  if(stage==="letters"){
+    hovering=true;
+    brailleLayout(letters[index]);
+  }
+});
 
 rotator.addEventListener("mouseleave",()=>{
-  hovering=false
-  ringLayout()
-})
+  if(stage==="letters"){
+    hovering=false;
+    index=0;
+    ringLayout();
+  }
+});
 
 rotator.addEventListener("click",()=>{
-  if(!hovering) return
-  index=(index+1)%letters.length
-  brailleLayout(letters[index])
+  if(stage==="pulse"){
+    navigationStage();
+    return;
+  }
+  if(!hovering) return;
+  index++;
+  if(index>=letters.length){
+    hovering=false;
+    ringLayout();
+    startPulse();
+    return;
+  }
+  brailleLayout(letters[index]);
 })
 
-ringLayout()
+ringLayout();
+
 </script>
+
 </body>
 </html>
