@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>mn-home</title>
+<title>Braille Orbit Portfolio</title>
 
 <style>
 html,body{
@@ -249,12 +249,13 @@ function showSection(i){
   // Capture exact screen position before reparenting to fixed
   const rect = activeDot.getBoundingClientRect();
 
+  // Use center of bounding box so translate(-50%,-50%) lands in the same spot
   activeDot.style.transition = "none";
   activeDot.style.position = "fixed";
-  activeDot.style.left = rect.left + "px";
-  activeDot.style.top = rect.top + "px";
+  activeDot.style.left = (rect.left + rect.width / 2) + "px";
+  activeDot.style.top = (rect.top + rect.height / 2) + "px";
   activeDot.style.bottom = "auto";
-  activeDot.style.transform = "translate(0, 0)";
+  activeDot.style.transform = "translate(-50%, -50%) scale(1.1)";
   activeDot.style.zIndex = 100;
   activeDot.style.opacity = 1;
 
@@ -295,6 +296,7 @@ function stopNavPulse(i){
     navPulseTimers[i] = null;
   }
 }
+
 
 // event listeners
 rotator.addEventListener("mouseenter",()=>{
